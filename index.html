@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Estimation Immobilière | Mon Estimation</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <header class="main-header">
+    <div class="container">
+      <div class="logo">
+        <i class="fas fa-home"></i>
+        <h2>Mon Estimation</h2>
+      </div>
+    </div>
+  </header>
+  
+  <section class="hero">
+    <div class="hero-overlay"></div>
+    <div class="container">
+      <div class="hero-content">
+        <h1 class="animate-title">Estimez votre bien immobilier en ligne</h1>
+        <p class="animate-subtitle">Obtenez une estimation rapide et gratuite en quelques clics. Nos experts immobiliers vous accompagnent.</p>
+        <div class="hero-badges animate-badges">
+          <div class="badge">
+            <i class="fas fa-bolt"></i>
+            <span>Rapide</span>
+          </div>
+          <div class="badge">
+            <i class="fas fa-euro-sign"></i>
+            <span>Gratuit</span>
+          </div>
+          <div class="badge">
+            <i class="fas fa-handshake"></i>
+            <span>Sans engagement</span>
+          </div>
+        </div>
+        <a href="#estimate-form" class="hero-button animate-button">
+          <i class="fas fa-calculator"></i> Estimer maintenant
+        </a>
+      </div>
+    </div>
+  </section>
+  
+  <section class="form-section">
+    <div class="container">
+      <div class="section-header">
+        <h2><i class="fas fa-clipboard-list"></i> Votre estimation gratuite</h2>
+        <p>Remplissez le formulaire ci-dessous pour obtenir une estimation de votre bien</p>
+      </div>
+      
+      <form id="estimate-form">
+        <div class="form-group">
+          <label for="type"><i class="fas fa-building"></i> Type de bien</label>
+          <select id="type" required>
+            <option value="">Sélectionnez</option>
+            <option value="Appartement">Appartement</option>
+            <option value="Maison">Maison</option>
+            <option value="Villa">Villa</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="surface"><i class="fas fa-ruler-combined"></i> Surface (m²)</label>
+          <input type="number" id="surface" placeholder="Ex: 100" required min="1">
+        </div>
+        <div class="form-group">
+          <label for="location"><i class="fas fa-map-marker-alt"></i> Localisation (Ville ou CP)</label>
+          <input type="text" id="location" placeholder="Ex: Paris" required>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="rooms"><i class="fas fa-door-open"></i> Pièces</label>
+            <select id="rooms">
+              <option value="">Sélectionnez</option>
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+              <option value="5+">5+</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="floor"><i class="fas fa-stairs"></i> Étage</label>
+            <select id="floor">
+              <option value="">Sélectionnez</option>
+              <option value="RDC">RDC</option>
+              <option value="1">1er</option>
+              <option value="2-4">2-4</option>
+              <option value="5+">5+</option>
+            </select>
+          </div>
+        </div>
+        <div class="divider"></div>
+        <h3>Vos coordonnées</h3>
+        <div class="form-group">
+          <label for="name"><i class="fas fa-user"></i> Votre nom</label>
+          <input type="text" id="name" placeholder="Ex: Jean Dupont" required>
+        </div>
+        <div class="form-group">
+          <label for="email"><i class="fas fa-envelope"></i> Email</label>
+          <input type="email" id="email" placeholder="Ex: email@exemple.com" required>
+        </div>
+        <div class="form-group">
+          <label for="phone"><i class="fas fa-phone"></i> Téléphone</label>
+          <input type="tel" id="phone" placeholder="Ex: 0601020304" required>
+        </div>
+        <div class="privacy-policy">
+          <input type="checkbox" id="privacy" required>
+          <label for="privacy">J'accepte que mes informations soient utilisées pour me recontacter</label>
+        </div>
+        <button type="submit" id="submit-btn"><i class="fas fa-calculator"></i> Obtenir mon estimation</button>
+        <div class="estimate-result" id="estimate-result"></div>
+        <div class="success-message" id="success-message">
+          <i class="fas fa-check-circle"></i> Merci ! Votre demande a bien été envoyée. Nous vous contacterons bientôt avec votre estimation.
+        </div>
+      </form>
+    </div>
+  </section>
+  <footer>
+    <div class="container">
+      <p>&copy; 2025 Mon Estimation - Tous droits réservés</p>
+    </div>
+  </footer>
+  <script src="script.js"></script>
+</body>
+</html>
