@@ -48,6 +48,12 @@
     display: flex;
     align-items: center;
     color: var(--hero-text-color);
+    gap: 15px;
+  }
+  .logo img {
+    height: 75px;
+    width: auto;
+    object-fit: contain;
   }
   .logo i {
     font-size: 1.8rem;
@@ -59,6 +65,7 @@
     font-weight: 700;
     letter-spacing: 0.5px;
   }
+
   nav ul {
     display: flex;
     list-style: none;
@@ -464,6 +471,14 @@
   @media (max-width: 480px) {
     .main-header {
       padding: 0.8rem 0;
+    }
+    
+    .logo {
+      gap: 10px;
+    }
+    
+    .logo img {
+      height: 40px;
     }
     
     .logo i {
