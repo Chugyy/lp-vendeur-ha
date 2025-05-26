@@ -5,6 +5,9 @@ document.addEventListener('DOMContentLoaded', function() {
   const resultDiv = document.getElementById('estimate-result');
   const successMessage = document.getElementById('success-message');
   const heroButton = document.querySelector('.hero-button');
+  const typeSelect = document.getElementById('type');
+  const roomsGroup = document.getElementById('rooms-group');
+  const floorGroup = document.getElementById('floor-group');
   
   // Smooth scroll for hero button
   if (heroButton) {
@@ -25,6 +28,25 @@ document.addEventListener('DOMContentLoaded', function() {
       }
     });
   }
+  
+  // Gestion conditionnelle des champs pièces/étage
+  typeSelect.addEventListener('change', function() {
+    const selectedType = this.value;
+    
+    if (selectedType === 'Terrain') {
+      // Masquer les champs pièces et étage pour un terrain
+      roomsGroup.style.display = 'none';
+      floorGroup.style.display = 'none';
+      
+      // Retirer les attributs required
+      document.getElementById('rooms').removeAttribute('required');
+      document.getElementById('floor').removeAttribute('required');
+    } else {
+      // Afficher les champs pour les autres types de biens
+      roomsGroup.style.display = 'block';
+      floorGroup.style.display = 'block';
+    }
+  });
   
   // Animations on scroll
   const animateOnScroll = function() {
@@ -71,8 +93,8 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Special validation for phone
     if (input.id === 'phone' && input.value) {
-      const phoneRegex = /^0[1-9]([-. ]?[0-9]{2}){4}$/;
-      if (!phoneRegex.test(input.value.replace(/\s/g, ''))) {
+      const phoneRegex = /^[0-9\s\-\.\(\)]+$/;
+      if (!phoneRegex.test(input.value) || input.value.length < 8) {
         input.classList.add('error');
       }
     }
@@ -93,86 +115,92 @@ document.addEventListener('DOMContentLoaded', function() {
     submitBtn.disabled = !isValid;
   }
   
+  // Fonction pour envoyer les données via l'API backend
+  async function sendToAirtable(formData) {
+    try {
+      const response = await fetch('/api/submit-lead', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(formData)
+      });
+      
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || `HTTP error! status: ${response.status}`);
+      }
+      
+      return await response.json();
+    } catch (error) {
+      console.error('Erreur lors de l\'envoi des données:', error);
+      throw error;
+    }
+  }
+  
   // Form submission
-  form.addEventListener('submit', function(e) {
+  form.addEventListener('submit', async function(e) {
     e.preventDefault();
     
     // Show loading state
     submitBtn.disabled = true;
-    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Traitement en cours...';
+    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Envoi en cours...';
     
     // Get form data
     const formData = {
       type: document.getElementById('type').value,
       surface: document.getElementById('surface').value,
       location: document.getElementById('location').value,
-      rooms: document.getElementById('rooms').value || 'Non spécifié',
-      floor: document.getElementById('floor').value || 'Non spécifié',
+      rooms: document.getElementById('rooms').value || null,
+      floor: document.getElementById('floor').value || null,
       name: document.getElementById('name').value,
       email: document.getElementById('email').value,
-      phone: document.getElementById('phone').value
+      phone: document.getElementById('phone').value,
+      countryCode: document.getElementById('country-code').value
     };
     
-    // Simulate API call with a timeout
-    setTimeout(() => {
-      // Calculate an estimated price (this is a simple formula for demo purposes)
-      let basePrice = 0;
+    try {
+      // Envoyer les données à Airtable via l'API backend
+      await sendToAirtable(formData);
       
-      switch(formData.location.toLowerCase()) {
-        case 'paris':
-          basePrice = 10000;
-          break;
-        case 'lyon':
-          basePrice = 4500;
-          break;
-        case 'marseille':
-          basePrice = 3500;
-          break;
-        case 'bordeaux':
-          basePrice = 4000;
-          break;
-        default:
-          basePrice = 3000;
+      // Track Facebook Pixel Lead event
+      if (typeof fbq !== 'undefined') {
+        fbq('track', 'Lead', {
+          content_name: 'Estimation immobilière',
+          content_category: 'Real Estate',
+          value: 0,
+          currency: 'EUR'
+        });
       }
       
-      let multiplier = 1;
-      switch(formData.type) {
-        case 'Appartement':
-          multiplier = 1;
-          break;
-        case 'Maison':
-          multiplier = 1.2;
-          break;
-        case 'Villa':
-          multiplier = 1.5;
-          break;
-      }
+      // Masquer l'estimation factice et le message de succès
+      resultDiv.style.display = 'none';
+      successMessage.style.display = 'none';
       
-      // Calculate estimated price
-      const estimatedPrice = basePrice * multiplier * formData.surface;
-      const formattedPrice = new Intl.NumberFormat('fr-FR', { 
-        style: 'currency', 
-        currency: 'EUR',
-        maximumFractionDigits: 0
-      }).format(estimatedPrice);
+      // Afficher la popup de confirmation
+      showModal();
       
-      // Display result and success message
-      resultDiv.textContent = `Estimation: ${formattedPrice}`;
-      resultDiv.style.display = 'block';
-      
-      // Show success message after 1 second
+      // Reset form after successful submission
       setTimeout(() => {
-        successMessage.style.display = 'block';
-        
-        // Reset button
+        form.reset();
         submitBtn.disabled = false;
         submitBtn.innerHTML = '<i class="fas fa-calculator"></i> Obtenir mon estimation';
         
-        // Scroll to success message
-        successMessage.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      }, 1000);
+        // Reset conditional display
+        roomsGroup.style.display = 'block';
+        floorGroup.style.display = 'block';
+      }, 2000);
       
-    }, 2000); // Simulate 2 second API delay
+    } catch (error) {
+      console.error('Erreur lors de l\'envoi du formulaire:', error);
+      
+      // En cas d'erreur, afficher un message d'erreur
+      alert('Une erreur est survenue lors de l\'envoi de votre demande. Veuillez réessayer.');
+      
+      // Reset button
+      submitBtn.disabled = false;
+      submitBtn.innerHTML = '<i class="fas fa-calculator"></i> Obtenir mon estimation';
+    }
   });
   
   // Add focus effects to inputs
@@ -185,5 +213,37 @@ document.addEventListener('DOMContentLoaded', function() {
       this.parentElement.classList.remove('focused');
     });
   });
+});
+
+// Fonctions pour gérer la popup
+function showModal() {
+  const modal = document.getElementById('confirmation-modal');
+  modal.style.display = 'block';
+  
+  // Prevent body scroll when modal is open
+  document.body.style.overflow = 'hidden';
+}
+
+function closeModal() {
+  const modal = document.getElementById('confirmation-modal');
+  modal.style.display = 'none';
+  
+  // Restore body scroll
+  document.body.style.overflow = 'auto';
+}
+
+// Close modal when clicking outside
+window.addEventListener('click', function(event) {
+  const modal = document.getElementById('confirmation-modal');
+  if (event.target === modal) {
+    closeModal();
+  }
+});
+
+// Close modal with ESC key
+window.addEventListener('keydown', function(event) {
+  if (event.key === 'Escape') {
+    closeModal();
+  }
 });
   

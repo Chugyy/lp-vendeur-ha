@@ -4,9 +4,28 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Estimation Immobilière | Mon Estimation</title>
+  <link rel="icon" type="image/svg" href="https://www.ha.immo/office12/fc_premium_v2/catalog/images/desktop/footer/logo-ha-immo.svg">
   <link rel="stylesheet" href="styles.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Meta Pixel Code -->
+  <script>
+  !function(f,b,e,v,n,t,s)
+  {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+  n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+  if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+  n.queue=[];t=b.createElement(e);t.async=!0;
+  t.src=v;s=b.getElementsByTagName(e)[0];
+  s.parentNode.insertBefore(t,s)}(window, document,'script',
+  'https://connect.facebook.net/en_US/fbevents.js');
+  fbq('init', '793185801155745');
+  fbq('track', 'PageView');
+  </script>
+  <noscript><img height="1" width="1" style="display:none"
+  src="https://www.facebook.com/tr?id=793185801155745&ev=PageView&noscript=1"
+  /></noscript>
+  <!-- End Meta Pixel Code -->
 </head>
 <body>
   <header class="main-header">
@@ -60,6 +79,7 @@
             <option value="Appartement">Appartement</option>
             <option value="Maison">Maison</option>
             <option value="Villa">Villa</option>
+            <option value="Terrain">Terrain</option>
           </select>
         </div>
         <div class="form-group">
@@ -70,33 +90,20 @@
           <label for="location"><i class="fas fa-map-marker-alt"></i> Localisation (Ville ou CP)</label>
           <input type="text" id="location" placeholder="Ex: Paris" required>
         </div>
-        <div class="form-row">
-          <div class="form-group">
+        <div class="form-row" id="property-details">
+          <div class="form-group" id="rooms-group">
             <label for="rooms"><i class="fas fa-door-open"></i> Pièces</label>
-            <select id="rooms">
-              <option value="">Sélectionnez</option>
-              <option value="1">1</option>
-              <option value="2">2</option>
-              <option value="3">3</option>
-              <option value="4">4</option>
-              <option value="5+">5+</option>
-            </select>
+            <input type="number" id="rooms" placeholder="Ex: 3" min="1" max="20">
           </div>
-          <div class="form-group">
+          <div class="form-group" id="floor-group">
             <label for="floor"><i class="fas fa-stairs"></i> Étage</label>
-            <select id="floor">
-              <option value="">Sélectionnez</option>
-              <option value="RDC">RDC</option>
-              <option value="1">1er</option>
-              <option value="2-4">2-4</option>
-              <option value="5+">5+</option>
-            </select>
+            <input type="number" id="floor" placeholder="Ex: 2" min="0" max="50">
           </div>
         </div>
         <div class="divider"></div>
         <h3>Vos coordonnées</h3>
         <div class="form-group">
-          <label for="name"><i class="fas fa-user"></i> Votre nom</label>
+          <label for="name"><i class="fas fa-user"></i> Nom complet</label>
           <input type="text" id="name" placeholder="Ex: Jean Dupont" required>
         </div>
         <div class="form-group">
@@ -105,7 +112,15 @@
         </div>
         <div class="form-group">
           <label for="phone"><i class="fas fa-phone"></i> Téléphone</label>
-          <input type="tel" id="phone" placeholder="Ex: 0601020304" required>
+          <div class="phone-input">
+            <select id="country-code" class="country-code">
+              <option value="+33">🇫🇷 +33</option>
+              <option value="+262">🇷🇪 +262</option>
+              <option value="+32">🇧🇪 +32</option>
+              <option value="+41">🇨🇭 +41</option>
+            </select>
+            <input type="tel" id="phone" placeholder="Ex: 601020304" required>
+          </div>
         </div>
         <div class="privacy-policy">
           <input type="checkbox" id="privacy" required>
@@ -124,6 +139,19 @@
       <p>&copy; 2025 Mon Estimation - Tous droits réservés</p>
     </div>
   </footer>
+  
+  <!-- Modal de confirmation -->
+  <div id="confirmation-modal" class="modal">
+    <div class="modal-content">
+      <div class="icon">
+        <i class="fas fa-check-circle"></i>
+      </div>
+      <h3>Merci pour votre demande !</h3>
+      <p>Nous avons bien reçu vos coordonnées. Notre équipe d'experts immobiliers vous contactera dans les plus brefs délais pour vous fournir une estimation personnalisée de votre bien.</p>
+      <button class="modal-close" onclick="closeModal()">Parfait</button>
+    </div>
+  </div>
+  
   <script src="script.js"></script>
 </body>
 </html>
