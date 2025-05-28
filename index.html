@@ -50,7 +50,7 @@
           </div>
           <div class="badge">
             <i class="fas fa-euro-sign"></i>
-            <span>Gratuit</span>
+            <span>Gratuit*</span>
           </div>
           <div class="badge">
             <i class="fas fa-handshake"></i>
@@ -58,8 +58,11 @@
           </div>
         </div>
         <a href="#estimate-form" class="hero-button animate-button">
-          <i class="fas fa-calculator"></i> Estimer maintenant
+          <i class="fas fa-calculator"></i> Obtenir une estimation dans les 48h
         </a>
+        <div class="hero-disclaimer">
+          <p>* Estimation gratuite uniquement dans le cadre d'un projet de vente. Pour les estimations notariales, des frais s'appliquent.</p>
+        </div>
       </div>
     </div>
   </section>
@@ -68,7 +71,7 @@
     <div class="container">
       <div class="section-header">
         <h2><i class="fas fa-clipboard-list"></i> Votre estimation gratuite</h2>
-        <p>Remplissez le formulaire ci-dessous pour obtenir une estimation de votre bien</p>
+        <p>Remplissez le formulaire ci-dessous pour être recontacté dans les plus brefs délais par nos experts</p>
       </div>
       
       <form id="estimate-form">
@@ -83,23 +86,8 @@
           </select>
         </div>
         <div class="form-group">
-          <label for="surface"><i class="fas fa-ruler-combined"></i> Surface (m²)</label>
-          <input type="number" id="surface" placeholder="Ex: 100" required min="1">
-        </div>
-        <div class="form-group">
           <label for="location"><i class="fas fa-map-marker-alt"></i> Localisation (Ville ou CP)</label>
-          <input type="text" id="location" placeholder="Ex: Paris" required>
-        </div>
-        <div class="form-row" id="property-details">
-          <div class="form-group" id="rooms-group">
-            <label for="rooms"><i class="fas fa-door-open"></i> Pièces</label>
-            <input type="number" id="rooms" placeholder="Ex: 3" min="1" max="20">
-          </div>
-          <div class="form-group" id="floor-group">
-            <label for="floor"><i class="fas fa-stairs"></i> Étage</label>
-            <input type="number" id="floor" placeholder="Ex: 2" min="0" max="50">
-          </div>
-        </div>
+          <input type="text" id="location" placeholder="Ex: Saint-Pierre" required>
         <div class="divider"></div>
         <h3>Vos coordonnées</h3>
         <div class="form-group">
@@ -114,8 +102,8 @@
           <label for="phone"><i class="fas fa-phone"></i> Téléphone</label>
           <div class="phone-input">
             <select id="country-code" class="country-code">
-              <option value="+33">🇫🇷 +33</option>
               <option value="+262">🇷🇪 +262</option>
+              <option value="+33">🇫🇷 +33</option>
               <option value="+32">🇧🇪 +32</option>
               <option value="+41">🇨🇭 +41</option>
             </select>
@@ -126,7 +114,7 @@
           <input type="checkbox" id="privacy" required>
           <label for="privacy">J'accepte que mes informations soient utilisées pour me recontacter</label>
         </div>
-        <button type="submit" id="submit-btn"><i class="fas fa-calculator"></i> Obtenir mon estimation</button>
+        <button type="submit" id="submit-btn"><i class="fas fa-phone"></i> Être contacté sous 48h</button>
         <div class="estimate-result" id="estimate-result"></div>
         <div class="success-message" id="success-message">
           <i class="fas fa-check-circle"></i> Merci ! Votre demande a bien été envoyée. Nous vous contacterons bientôt avec votre estimation.

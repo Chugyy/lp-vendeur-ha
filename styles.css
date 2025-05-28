@@ -198,8 +198,21 @@
     margin-right: 8px;
   }
   .hero-button:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 25px rgba(255, 193, 7, 0.4);
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(255, 193, 7, 0.4);
+  }
+  .hero-disclaimer {
+    margin-top: 2rem;
+    opacity: 0;
+    transform: translateY(30px);
+    animation: fadeUp 0.8s ease 0.8s forwards;
+  }
+  .hero-disclaimer p {
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 0.9rem;
+    font-style: italic;
+    margin: 0;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.3);
   }
   @keyframes fadeUp {
     to {
@@ -236,10 +249,24 @@
     border-radius: 2px;
   }
   .section-header p {
-    font-size: 1.1rem;
     color: #666;
-    max-width: 700px;
-    margin: 0 auto;
+    font-size: 1.1rem;
+    margin-bottom: 0;
+  }
+  .form-disclaimer {
+    margin-top: 1rem;
+    padding: 0.8rem 1.2rem;
+    background-color: rgba(255, 193, 7, 0.1);
+    border-left: 3px solid var(--primary-yellow);
+    border-radius: 4px;
+  }
+  .form-disclaimer p {
+    margin: 0;
+    color: #666;
+  }
+  .form-disclaimer small {
+    font-size: 0.85rem;
+    font-style: italic;
   }
   form {
     background: var(--light-bg);
@@ -365,10 +392,12 @@
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
   }
   button:disabled {
-    opacity: 0.6;
+    opacity: 0.5;
     cursor: not-allowed;
     transform: none;
     box-shadow: none;
+    background: #ccc;
+    color: #666;
   }
   .estimate-result {
     margin-top: 1.5rem;

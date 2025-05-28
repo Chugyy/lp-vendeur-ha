@@ -8,6 +8,7 @@ document.addEventListener('DOMContentLoaded', function() {
   const typeSelect = document.getElementById('type');
   const roomsGroup = document.getElementById('rooms-group');
   const floorGroup = document.getElementById('floor-group');
+  const privacyCheckbox = document.getElementById('privacy');
   
   // Smooth scroll for hero button
   if (heroButton) {
@@ -74,6 +75,9 @@ document.addEventListener('DOMContentLoaded', function() {
     input.addEventListener('input', validateInput);
   });
   
+  // Ajouter un listener spécifique pour la case de confidentialité
+  privacyCheckbox.addEventListener('change', checkFormValidity);
+
   function validateInput(e) {
     const input = e.target;
     
@@ -106,11 +110,17 @@ document.addEventListener('DOMContentLoaded', function() {
     const requiredInputs = form.querySelectorAll('[required]');
     let isValid = true;
     
+    // Vérifier tous les champs requis
     requiredInputs.forEach(input => {
       if (input.classList.contains('error') || !input.value.trim()) {
         isValid = false;
       }
     });
+    
+    // Vérifier que la case de confidentialité est cochée
+    if (!privacyCheckbox.checked) {
+      isValid = false;
+    }
     
     submitBtn.disabled = !isValid;
   }
@@ -183,12 +193,16 @@ document.addEventListener('DOMContentLoaded', function() {
       // Reset form after successful submission
       setTimeout(() => {
         form.reset();
-        submitBtn.disabled = false;
-        submitBtn.innerHTML = '<i class="fas fa-calculator"></i> Obtenir mon estimation';
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<i class="fas fa-phone"></i> Être contacté sous 48h';
+        checkFormValidity();
         
         // Reset conditional display
         roomsGroup.style.display = 'block';
         floorGroup.style.display = 'block';
+        
+        // Re-vérifier la validité du formulaire
+        checkFormValidity();
       }, 2000);
       
     } catch (error) {
@@ -198,8 +212,9 @@ document.addEventListener('DOMContentLoaded', function() {
       alert('Une erreur est survenue lors de l\'envoi de votre demande. Veuillez réessayer.');
       
       // Reset button
-      submitBtn.disabled = false;
-      submitBtn.innerHTML = '<i class="fas fa-calculator"></i> Obtenir mon estimation';
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = '<i class="fas fa-phone"></i> Être contacté sous 48h';
+      checkFormValidity();
     }
   });
   
@@ -213,6 +228,9 @@ document.addEventListener('DOMContentLoaded', function() {
       this.parentElement.classList.remove('focused');
     });
   });
+  
+  // Désactiver le bouton par défaut
+  submitBtn.disabled = true;
 });
 
 // Fonctions pour gérer la popup
