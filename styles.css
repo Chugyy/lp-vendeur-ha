@@ -737,3 +737,22 @@
     font-size: 0.85rem;
   }
   
+  .bottom-disclaimer {
+    background-color: #f8f9fa;
+    padding: 1.5rem 0;
+    border-top: 1px solid #e9ecef;
+    margin-top: 2rem;
+  }
+  
+  .bottom-disclaimer p {
+    text-align: center;
+    margin: 0;
+    color: #666;
+    font-style: italic;
+    line-height: 1.5;
+  }
+  
+  .bottom-disclaimer small {
+    font-size: 0.85rem;
+  }
+  

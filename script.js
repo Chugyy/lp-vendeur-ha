@@ -8,7 +8,6 @@ document.addEventListener('DOMContentLoaded', function() {
   const typeSelect = document.getElementById('type');
   const roomsGroup = document.getElementById('rooms-group');
   const floorGroup = document.getElementById('floor-group');
-  const privacyCheckbox = document.getElementById('privacy');
   
   // Smooth scroll for hero button
   if (heroButton) {
@@ -75,8 +74,8 @@ document.addEventListener('DOMContentLoaded', function() {
     input.addEventListener('input', validateInput);
   });
   
-  // Ajouter un listener spécifique pour la case de confidentialité
-  privacyCheckbox.addEventListener('change', checkFormValidity);
+  // Désactiver le bouton par défaut
+  submitBtn.disabled = true;
 
   function validateInput(e) {
     const input = e.target;
@@ -116,11 +115,6 @@ document.addEventListener('DOMContentLoaded', function() {
         isValid = false;
       }
     });
-    
-    // Vérifier que la case de confidentialité est cochée
-    if (!privacyCheckbox.checked) {
-      isValid = false;
-    }
     
     submitBtn.disabled = !isValid;
   }
@@ -194,7 +188,7 @@ document.addEventListener('DOMContentLoaded', function() {
       setTimeout(() => {
         form.reset();
         submitBtn.disabled = true;
-        submitBtn.innerHTML = '<i class="fas fa-phone"></i> Être contacté sous 48h';
+        submitBtn.innerHTML = '<i class="fas fa-phone"></i> Être contacté par nos experts';
         checkFormValidity();
         
         // Reset conditional display
@@ -213,7 +207,7 @@ document.addEventListener('DOMContentLoaded', function() {
       
       // Reset button
       submitBtn.disabled = true;
-      submitBtn.innerHTML = '<i class="fas fa-phone"></i> Être contacté sous 48h';
+      submitBtn.innerHTML = '<i class="fas fa-phone"></i> Être contacté par nos experts';
       checkFormValidity();
     }
   });
@@ -228,9 +222,6 @@ document.addEventListener('DOMContentLoaded', function() {
       this.parentElement.classList.remove('focused');
     });
   });
-  
-  // Désactiver le bouton par défaut
-  submitBtn.disabled = true;
 });
 
 // Fonctions pour gérer la popup
