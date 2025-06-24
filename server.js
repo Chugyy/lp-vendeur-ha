@@ -73,7 +73,33 @@ ${formData.floor ? `• Étage : ${formData.floor}` : ''}
   }
 }
 
-// Route API pour envoyer les données à Airtable
+// Fonction pour obtenir le token CRM
+async function getCRMToken() {
+  try {
+    const response = await fetch(`${process.env.CRM_API_URL}/auth/login`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        username: process.env.CRM_USERNAME,
+        password: process.env.CRM_PASSWORD
+      })
+    });
+
+    if (!response.ok) {
+      throw new Error(`Erreur lors de l'authentification CRM: ${response.status}`);
+    }
+
+    const data = await response.json();
+    return data.access_token;
+  } catch (error) {
+    console.error('Erreur lors de l\'obtention du token CRM:', error);
+    throw error;
+  }
+}
+
+// Route API pour envoyer les données au CRM
 app.post('/api/submit-lead', async (req, res) => {
   try {
     const { type, surface, location, rooms, name, email, phone, countryCode } = req.body;
@@ -83,48 +109,43 @@ app.post('/api/submit-lead', async (req, res) => {
       return res.status(400).json({ error: 'Champs requis manquants' });
     }
 
-    // Validation de l'API key
-    if (!process.env.AIRTABLE_API_KEY || process.env.AIRTABLE_API_KEY === 'YOUR_AIRTABLE_API_KEY') {
-      console.error('API key Airtable manquante ou invalide');
+    // Validation de la configuration CRM
+    if (!process.env.CRM_API_URL || !process.env.CRM_USERNAME || !process.env.CRM_PASSWORD) {
+      console.error('Configuration CRM manquante');
       return res.status(500).json({ error: 'Configuration serveur invalide' });
     }
     
-    const airtableData = {
-      fields: {
-        "Type de bien": type,
-        "Surface": parseInt(surface),
-        "Localisation": location,
-        "Nom complet": name,
-        "Email": email,
-        "Téléphone": `${countryCode}${phone}`,
-        "Autorisation de contact": true,
-        "Type de lead": "Vendeur"
-      }
+    // Obtenir le token d'authentification
+    const token = await getCRMToken();
+    
+    // Préparer les données pour le CRM (endpoint leads)
+    const crmData = {
+      first_name: name.split(' ')[0] || name,
+      last_name: name.split(' ').slice(1).join(' ') || 'N/A',
+      email: email,
+      phone: `${countryCode}${phone}`,
+      departement: location,
+      source: 'Site web LP Vendeur'
     };
     
-    // Ajouter le nombre de pièces seulement si ce n'est pas un terrain
-    if (type !== 'Terrain' && rooms) {
-      airtableData.fields["Nombre de pièces"] = parseInt(rooms);
-    }
-    
-    // Appel à l'API Airtable
-    const response = await fetch(`https://api.airtable.com/v0/${process.env.AIRTABLE_BASE_ID}/${process.env.AIRTABLE_TABLE_ID}`, {
+    // Appel à l'API CRM
+    const response = await fetch(`${process.env.CRM_API_URL}/leads`, {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${process.env.AIRTABLE_API_KEY}`,
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
       },
-      body: JSON.stringify(airtableData)
+      body: JSON.stringify(crmData)
     });
     
     if (!response.ok) {
       const errorText = await response.text();
-      console.error(`Erreur Airtable: ${response.status} - ${errorText}`);
-      throw new Error(`Erreur Airtable: ${response.status}`);
+      console.error(`Erreur CRM: ${response.status} - ${errorText}`);
+      throw new Error(`Erreur CRM: ${response.status}`);
     }
     
     const result = await response.json();
-    console.log('Lead enregistré avec succès:', result.id);
+    console.log('Lead enregistré avec succès dans le CRM:', result.id || result);
 
     // Envoyer la notification WhatsApp après l'enregistrement réussi
     await sendWhatsAppNotification(req.body);
@@ -132,7 +153,7 @@ app.post('/api/submit-lead', async (req, res) => {
     res.json({ success: true, data: result });
     
   } catch (error) {
-    console.error('Erreur lors de l\'envoi vers Airtable:', error);
+    console.error('Erreur lors de l\'envoi vers le CRM:', error);
     res.status(500).json({ error: 'Erreur serveur lors de l\'enregistrement' });
   }
 });
