@@ -109,19 +109,38 @@ document.addEventListener('DOMContentLoaded', function() {
     const requiredInputs = form.querySelectorAll('[required]');
     let isValid = true;
     
+    console.log('=== Vérification de validité du formulaire ===');
+    
     // Vérifier tous les champs requis
     requiredInputs.forEach(input => {
-      if (input.classList.contains('error') || !input.value.trim()) {
+      const hasError = input.classList.contains('error');
+      const isEmpty = !input.value.trim();
+      
+      console.log(`Champ ${input.id}: valeur="${input.value}", erreur=${hasError}, vide=${isEmpty}`);
+      
+      if (hasError || isEmpty) {
         isValid = false;
       }
     });
     
+    console.log(`Formulaire valide: ${isValid}`);
     submitBtn.disabled = !isValid;
+    
+    if (isValid) {
+      submitBtn.style.opacity = '1';
+      submitBtn.style.cursor = 'pointer';
+    } else {
+      submitBtn.style.opacity = '0.6';
+      submitBtn.style.cursor = 'not-allowed';
+    }
   }
   
   // Fonction pour envoyer les données via l'API backend
   async function sendToAirtable(formData) {
     try {
+      console.log('=== ENVOI DES DONNÉES AU SERVEUR ===');
+      console.log('Données envoyées:', formData);
+      
       const response = await fetch('/api/submit-lead', {
         method: 'POST',
         headers: {
@@ -145,6 +164,8 @@ document.addEventListener('DOMContentLoaded', function() {
   // Form submission
   form.addEventListener('submit', async function(e) {
     e.preventDefault();
+    
+    console.log('=== SOUMISSION DU FORMULAIRE DÉCLENCHÉE ===');
     
     // Show loading state
     submitBtn.disabled = true;

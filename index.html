@@ -84,6 +84,39 @@
         <div class="form-group">
           <label for="location"><i class="fas fa-map-marker-alt"></i> Localisation (Ville ou CP)</label>
           <input type="text" id="location" placeholder="Ex: Saint-Pierre" required>
+        </div>
+        
+        <div class="form-group" id="surface-group">
+          <label for="surface"><i class="fas fa-ruler"></i> Surface (m²)</label>
+          <input type="number" id="surface" placeholder="Ex: 85" min="1" required>
+        </div>
+        
+        <div class="form-group" id="rooms-group">
+          <label for="rooms"><i class="fas fa-door-open"></i> Nombre de pièces</label>
+          <select id="rooms" required>
+            <option value="">Sélectionnez</option>
+            <option value="1">1 pièce</option>
+            <option value="2">2 pièces</option>
+            <option value="3">3 pièces</option>
+            <option value="4">4 pièces</option>
+            <option value="5">5 pièces</option>
+            <option value="6">6+ pièces</option>
+          </select>
+        </div>
+        
+        <div class="form-group" id="floor-group">
+          <label for="floor"><i class="fas fa-layer-group"></i> Étage</label>
+          <select id="floor">
+            <option value="">Sélectionnez (optionnel)</option>
+            <option value="RDC">Rez-de-chaussée</option>
+            <option value="1">1er étage</option>
+            <option value="2">2ème étage</option>
+            <option value="3">3ème étage</option>
+            <option value="4">4ème étage</option>
+            <option value="5+">5ème étage et +</option>
+          </select>
+        </div>
+        
         <div class="divider"></div>
         <h3>Vos coordonnées</h3>
         <div class="form-group">
