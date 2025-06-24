@@ -124,9 +124,21 @@ app.post('/api/submit-lead', async (req, res) => {
       last_name: name.split(' ').slice(1).join(' ') || 'N/A',
       email: email,
       phone: `${countryCode}${phone}`,
-      departement: location,
       source: 'Site web LP Vendeur'
     };
+    
+    // Gestion intelligente du département/localisation
+    if (location) {
+      // Si c'est un code numérique court (ex: "974", "97"), utiliser departement
+      if (/^\d{2,3}$/.test(location) && location.length <= 5) {
+        crmData.departement = location;
+        console.log(`✅ Code département détecté: ${location} → champ 'departement'`);
+      } else {
+        // Sinon, utiliser departement_name pour les noms de villes/communes
+        crmData.departement_name = location;
+        console.log(`✅ Nom de commune détecté: ${location} → champ 'departement_name'`);
+      }
+    }
     
     // Appel à l'API CRM
     const response = await fetch(`${process.env.CRM_API_URL}/leads`, {
