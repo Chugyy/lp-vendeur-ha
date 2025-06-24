@@ -102,10 +102,10 @@ async function getCRMToken() {
 // Route API pour envoyer les données au CRM
 app.post('/api/submit-lead', async (req, res) => {
   try {
-    const { type, surface, location, rooms, name, email, phone, countryCode } = req.body;
+    const { type, location, name, email, phone, countryCode } = req.body;
     
-    // Validation des données
-    if (!type || !surface || !location || !name || !email || !phone) {
+    // Validation des données - formulaire simplifié
+    if (!type || !location || !name || !email || !phone) {
       return res.status(400).json({ error: 'Champs requis manquants' });
     }
 

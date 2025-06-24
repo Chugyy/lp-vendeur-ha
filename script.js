@@ -5,9 +5,6 @@ document.addEventListener('DOMContentLoaded', function() {
   const resultDiv = document.getElementById('estimate-result');
   const successMessage = document.getElementById('success-message');
   const heroButton = document.querySelector('.hero-button');
-  const typeSelect = document.getElementById('type');
-  const roomsGroup = document.getElementById('rooms-group');
-  const floorGroup = document.getElementById('floor-group');
   
   // Smooth scroll for hero button
   if (heroButton) {
@@ -29,24 +26,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   }
   
-  // Gestion conditionnelle des champs pièces/étage
-  typeSelect.addEventListener('change', function() {
-    const selectedType = this.value;
-    
-    if (selectedType === 'Terrain') {
-      // Masquer les champs pièces et étage pour un terrain
-      roomsGroup.style.display = 'none';
-      floorGroup.style.display = 'none';
-      
-      // Retirer les attributs required
-      document.getElementById('rooms').removeAttribute('required');
-      document.getElementById('floor').removeAttribute('required');
-    } else {
-      // Afficher les champs pour les autres types de biens
-      roomsGroup.style.display = 'block';
-      floorGroup.style.display = 'block';
-    }
-  });
+  // Plus besoin de gestion conditionnelle - formulaire simplifié
   
   // Animations on scroll
   const animateOnScroll = function() {
@@ -76,6 +56,11 @@ document.addEventListener('DOMContentLoaded', function() {
   
   // Désactiver le bouton par défaut
   submitBtn.disabled = true;
+  
+  // Vérifier la validité du formulaire au chargement
+  setTimeout(() => {
+    checkFormValidity();
+  }, 100);
 
   function validateInput(e) {
     const input = e.target;
@@ -171,13 +156,10 @@ document.addEventListener('DOMContentLoaded', function() {
     submitBtn.disabled = true;
     submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Envoi en cours...';
     
-    // Get form data
+    // Get form data - formulaire simplifié
     const formData = {
       type: document.getElementById('type').value,
-      surface: document.getElementById('surface').value,
       location: document.getElementById('location').value,
-      rooms: document.getElementById('rooms').value || null,
-      floor: document.getElementById('floor').value || null,
       name: document.getElementById('name').value,
       email: document.getElementById('email').value,
       phone: document.getElementById('phone').value,
@@ -210,13 +192,6 @@ document.addEventListener('DOMContentLoaded', function() {
         form.reset();
         submitBtn.disabled = true;
         submitBtn.innerHTML = '<i class="fas fa-phone"></i> Être contacté par nos experts';
-        checkFormValidity();
-        
-        // Reset conditional display
-        roomsGroup.style.display = 'block';
-        floorGroup.style.display = 'block';
-        
-        // Re-vérifier la validité du formulaire
         checkFormValidity();
       }, 2000);
       
